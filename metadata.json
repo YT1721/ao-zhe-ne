@@ -1,0 +1,7 @@
+{
+  "name": "好着呢 - 老照片修复专家",
+  "description": "一款专为中老年朋友设计的 AI 照相馆，提供老照片修复、照片变视频等温馨功能，留住珍贵记忆。",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
