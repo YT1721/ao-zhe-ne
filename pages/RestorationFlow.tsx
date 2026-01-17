@@ -192,6 +192,8 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
   const handleApiError = (err: any, base64: string, dataUrl: string) => {
     console.error("Restoration Error:", err);
     if (err.message === "API_KEY_INVALID" || err.message?.includes("Requested entity was not found") || err.message?.includes("403") || err.message?.includes("400")) {
+      // 如果 Key 无效，清除本地存储的 Key，给用户重新输入的机会
+      localStorage.removeItem('GEMINI_API_KEY');
       pendingFileRef.current = { base64, dataUrl };
       setShowKeyRequest(true);
     } else {

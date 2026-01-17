@@ -2,8 +2,33 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
 const getAIClient = () => {
-  const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
-  return new GoogleGenAI({ apiKey, httpOptions: { baseUrl: "/gemini-api" } });
+  let apiKey = localStorage.getItem('GEMINI_API_KEY');
+  const envKey = import.meta.env.VITE_API_KEY;
+
+  // 如果本地存储的是占位符或空，则清除并尝试使用环境变量
+  if (apiKey === 'PLACEHOLDER_API_KEY' || !apiKey) {
+    localStorage.removeItem('GEMINI_API_KEY');
+    apiKey = null;
+  }
+
+  // 优先使用 LocalStorage，其次使用环境变量
+  const finalKey = apiKey || envKey || "";
+  
+  if (!finalKey) {
+    console.warn("Gemini API Key is missing!");
+  } else {
+    // 仅在开发环境打印，方便调试（生产环境请移除）
+    if (import.meta.env.DEV) {
+      console.log(`Using API Key from: ${apiKey ? 'LocalStorage' : 'Env'} (${finalKey.substring(0, 5)}...)`);
+    }
+  }
+
+  return new GoogleGenAI({ 
+    apiKey: finalKey, 
+    httpOptions: { 
+      baseUrl: `${window.location.origin}/gemini-api` 
+    } 
+  });
 };
 
 /**
