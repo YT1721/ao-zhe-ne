@@ -3,7 +3,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 const getAIClient = () => {
   const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
-  return new GoogleGenAI({ apiKey }, { baseUrl: "/gemini-api" });
+  return new GoogleGenAI({ apiKey, httpOptions: { baseUrl: "/gemini-api" } });
 };
 
 /**
@@ -68,7 +68,8 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
     }
 
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-    const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
+    const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
+    const response = await fetch(`${downloadLink}&key=${apiKey}`);
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   } catch (error: any) {
