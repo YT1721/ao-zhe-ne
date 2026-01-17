@@ -204,6 +204,48 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
     setState(prev => ({ ...prev, isProcessing: false }));
   };
 
+  const handleSave = async () => {
+    const url = mode === 'photo' ? (state.restoredImage || '') : (state.videoUrl || '');
+    if (!url) return;
+    
+    const fileName = `好着呢_作品_${Date.now()}.${mode === 'photo' ? 'png' : 'mp4'}`;
+
+    // 1. 尝试使用 Web Share API (移动端体验最佳)
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: blob.type });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: '好着呢 - 老照片修复',
+          text: '这是我用“好着呢”修复的老照片，效果很棒！'
+        });
+        playGuidance("请在弹出的菜单中选择“保存图像”或分享给朋友。");
+        return;
+      }
+    } catch (error) {
+      console.warn("Web Share API failed, falling back to download");
+    }
+
+    // 2. 降级方案：传统的下载链接
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // 3. 针对 iOS Safari 等无法自动下载的情况，给出语音提示
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    if (isIOS) {
+        playGuidance("如果无法自动保存，请长按上方的照片，选择“存储到“照片””");
+    } else {
+        playGuidance("作品正在保存，请查看您的下载目录或相册。");
+    }
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -310,15 +352,7 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
           </div>
 
           <div className="flex flex-col gap-4">
-            <button onClick={() => {
-                const link = document.createElement('a');
-                link.href = mode === 'photo' ? (state.restoredImage || '') : (state.videoUrl || '');
-                link.download = `好着呢_作品_${Date.now()}.${mode === 'photo' ? 'png' : 'mp4'}`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                playGuidance("作品已经存入您的手机相册，记得分享给家人看看。");
-            }} className="w-full bg-primary text-white flex items-center justify-center gap-3 py-5 rounded-[1.5rem] shadow-xl shadow-primary/30 active:scale-95 transition-transform">
+            <button onClick={handleSave} className="w-full bg-primary text-white flex items-center justify-center gap-3 py-5 rounded-[1.5rem] shadow-xl shadow-primary/30 active:scale-95 transition-transform">
               <span className="material-symbols-outlined text-3xl font-black">download</span>
               <span className="text-xl font-black">存入我的手机相册</span>
             </button>
