@@ -53,6 +53,7 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
     aiAnalysis: ""
   });
 
+  const [progress, setProgress] = useState(0);
   const [sliderPos, setSliderPos] = useState(50);
   const [showLowEnergy, setShowLowEnergy] = useState(false);
   const [showKeyRequest, setShowKeyRequest] = useState(false);
@@ -148,8 +149,21 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
     
     if (mode === 'photo') {
       setLoadingText("正在精细重建光影...");
+      setProgress(10);
+      
+      // 模拟图片修复进度
+      const progressInterval = setInterval(() => {
+         setProgress(prev => {
+            if (prev >= 90) return 90;
+            return prev + Math.floor(Math.random() * 5) + 2;
+         });
+      }, 300);
+
       try {
         const result = await colorizeAndRestorePhoto(base64);
+        clearInterval(progressInterval);
+        setProgress(100);
+        
         const newWork: WorkItem = {
           id: Date.now().toString(),
           type: 'photo',
@@ -168,12 +182,19 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
         playGuidance(result.analysis || "修复好了！您看这张照片是不是和记忆中一样清晰？");
         onSuccess(newWork);
       } catch (err: any) {
+        clearInterval(progressInterval);
         handleApiError(err, base64, dataUrl);
       }
     } else {
       setLoadingText("正在唤醒时光记忆...");
+      setProgress(5);
       try {
-        const videoUrl = await generateVideoFromPhoto(base64, (msg) => setLoadingText(msg));
+        const videoUrl = await generateVideoFromPhoto(base64, (msg, percent) => {
+           setLoadingText(msg);
+           setProgress(percent);
+        });
+        setProgress(100);
+        
         const newWork: WorkItem = {
           id: Date.now().toString(),
           type: 'video',
@@ -389,9 +410,13 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
             <h3 className="text-xl font-black text-charcoal mb-2">正在施展魔法</h3>
             <p className="text-gray-500 font-bold animate-pulse mb-4">{loadingText}</p>
             {/* Progress Bar */}
-            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-primary animate-progress-indeterminate rounded-full"></div>
+            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden relative">
+              <div 
+                className="h-full bg-primary transition-all duration-300 ease-out rounded-full" 
+                style={{ width: `${progress}%` }}
+              ></div>
             </div>
+            <p className="text-xs text-gray-400 font-bold mt-2">{Math.round(progress)}%</p>
           </div>
         </div>
       )}

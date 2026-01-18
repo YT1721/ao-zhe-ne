@@ -74,7 +74,7 @@ export const colorizeAndRestorePhoto = async (base64Image: string) => {
   }
 };
 
-export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (msg: string) => void) => {
+export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (msg: string, percent: number) => void) => {
   const ai = getAIClient();
   try {
     let operation = await ai.models.generateVideos({
@@ -84,13 +84,22 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
       config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
     });
 
-    onProgress?.("正在开启时光通道...");
+    onProgress?.("正在开启时光通道...", 10);
 
+    let progress = 10;
     while (!operation.done) {
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve, 5000)); // 缩短轮询间隔以获得更流畅的进度感
       operation = await ai.operations.getVideosOperation({ operation: operation });
-      onProgress?.("回忆正在苏醒...");
+      
+      // 模拟进度增长，最高到 90%
+      if (progress < 90) {
+        progress += Math.floor(Math.random() * 10) + 5;
+        if (progress > 90) progress = 90;
+      }
+      onProgress?.("回忆正在苏醒...", progress);
     }
+    
+    onProgress?.("正在处理生成结果...", 95);
 
     // 增加对 result 字段的检查，因为有时 API 可能会返回 result 而不是 generatedVideos
     // @ts-ignore
