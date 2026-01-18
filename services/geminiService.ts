@@ -108,7 +108,13 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
     // 使用代理路径替换原始 Google 域名，解决国内访问问题
     // 原始: https://generativelanguage.googleapis.com/v1beta/files/xxx
     // 代理: https://www.laozhaopian.xin/gemini-api/v1beta/files/xxx
-    const proxyUrl = downloadLink.replace('https://generativelanguage.googleapis.com', `${window.location.origin}/gemini-api`);
+    // 兼容所有 Google 域名（如 storage.googleapis.com 等），只要是通过 gemini-api 转发的
+    let proxyUrl = downloadLink;
+    if (downloadLink.includes('googleapis.com')) {
+       // 提取路径部分，例如 /v1beta/files/xxx
+       const urlObj = new URL(downloadLink);
+       proxyUrl = `${window.location.origin}/gemini-api${urlObj.pathname}${urlObj.search}`;
+    }
     
     const separator = proxyUrl.includes('?') ? '&' : '?';
     const response = await fetch(`${proxyUrl}${separator}key=${apiKey}`);

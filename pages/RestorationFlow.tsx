@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { RestorationState, WorkItem } from '../types';
 import { colorizeAndRestorePhoto, generateGuidanceSpeech, generateVideoFromPhoto } from '../services/geminiService';
+import { compressImage } from '../utils/imageUtils';
 
 interface RestorationFlowProps {
   mode: 'photo' | 'video';
@@ -253,7 +254,7 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (energy < COST) {
@@ -261,13 +262,19 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
         e.target.value = '';
         return;
       }
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const base64 = (event.target?.result as string).split(',')[1];
-        const dataUrl = event.target?.result as string;
+      
+      setLoadingText("正在优化照片尺寸...");
+      setState(prev => ({ ...prev, isProcessing: true }));
+
+      try {
+        const { base64, dataUrl } = await compressImage(file);
+        setState(prev => ({ ...prev, isProcessing: false })); // 暂时关闭loading，等待 startRestorationProcess 开启
         await startRestorationProcess(base64, dataUrl);
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error("Image compression failed:", error);
+        setErrorMessage("照片处理失败，请换一张试试");
+        setState(prev => ({ ...prev, isProcessing: false }));
+      }
     }
   };
 
