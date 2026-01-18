@@ -117,9 +117,10 @@ const Profile: React.FC<ProfileProps> = ({ userStats, works, onGoHome, onDeleteW
         <div className="flex flex-col items-center">
           <div className="relative mb-5">
             <div 
-              className="bg-center bg-no-repeat aspect-square bg-cover rounded-[2.5rem] h-32 w-32 border-4 border-white shadow-2xl rotate-3" 
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop")' }}
-            ></div>
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-[2.5rem] h-32 w-32 border-4 border-white shadow-2xl rotate-3 bg-white flex items-center justify-center" 
+            >
+              <span className="material-symbols-outlined text-6xl text-primary/40">face_6</span>
+            </div>
             <div className="absolute -bottom-2 -right-2 bg-primary text-white size-10 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               <span className="material-symbols-outlined text-xl font-black">verified</span>
             </div>
