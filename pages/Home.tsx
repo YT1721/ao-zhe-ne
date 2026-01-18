@@ -52,7 +52,7 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
         >
           <div className="aspect-[16/10] w-full relative">
             <img 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0PKETE8G5BMr5sXbJH6068xMKwWqvI2fuwaN0_Tp46JtYtefl6w6-q8V5gnlIxXti61UKZFFiYiAo5ZmfLEwxYG_guoKO-4UYN-wrZ3BlYBReA-l9vAI01QUTaJJUhkYCjM2ljyaOzsqfDjxT-EDLqil-_vbuYM-H4Zg8877YqOWweS6YxzR-NjYDVVZPTdtUQcBRMWwTmAsuOMMJEBA4OBRGyuiuybzVfCtFtfcRLsDty5-5d3W2avAkjXdEzZfh1NCOdbfKehcK" 
+              src="https://images.unsplash.com/photo-1516661179612-4091a929656b?q=80&w=1000&auto=format&fit=crop" 
               className="w-full h-full object-cover grayscale opacity-80" 
               alt="Restoration" 
             />
@@ -82,7 +82,7 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
         >
           <div className="aspect-[16/10] w-full relative">
             <img 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjY6_cQX4LYBGHLiD0u3rvAaE2YIBUTrzHWiL9qB823Ur_z_Is5GWT4ExqtxF17VpIIue57TXg5FyIC9S95O-tqxAUzLp05QWZ0s9ZRfXo_VKnCcJ1yDhb6pCVRnHgn3rdfNQrHbkGsygSykGc-oir7ua1b2j0guLczEi7APF-aH8uQgtR1zt0SLC-N0W6D8MHzb5cSEDVgnMMA1OHbL0aXdS-s16k_T7_0E2zqgECQvdd4LVRdlZuua4XvREQ5RICwr_E-zTZOAoy" 
+              src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop" 
               className="w-full h-full object-cover grayscale opacity-80" 
               alt="Video" 
             />

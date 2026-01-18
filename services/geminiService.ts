@@ -94,7 +94,13 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
 
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
     const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
-    const response = await fetch(`${downloadLink}&key=${apiKey}`);
+    
+    // 使用代理路径替换原始 Google 域名，解决国内访问问题
+    // 原始: https://generativelanguage.googleapis.com/v1beta/files/xxx
+    // 代理: https://www.laozhaopian.xin/gemini-api/v1beta/files/xxx
+    const proxyUrl = downloadLink?.replace('https://generativelanguage.googleapis.com', `${window.location.origin}/gemini-api`);
+    
+    const response = await fetch(`${proxyUrl}&key=${apiKey}`);
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   } catch (error: any) {
