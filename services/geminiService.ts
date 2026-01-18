@@ -93,14 +93,26 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
     }
 
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+    if (!downloadLink) {
+      throw new Error("No video URI found in response");
+    }
+
     const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
     
     // 使用代理路径替换原始 Google 域名，解决国内访问问题
     // 原始: https://generativelanguage.googleapis.com/v1beta/files/xxx
     // 代理: https://www.laozhaopian.xin/gemini-api/v1beta/files/xxx
-    const proxyUrl = downloadLink?.replace('https://generativelanguage.googleapis.com', `${window.location.origin}/gemini-api`);
+    const proxyUrl = downloadLink.replace('https://generativelanguage.googleapis.com', `${window.location.origin}/gemini-api`);
     
-    const response = await fetch(`${proxyUrl}&key=${apiKey}`);
+    const separator = proxyUrl.includes('?') ? '&' : '?';
+    const response = await fetch(`${proxyUrl}${separator}key=${apiKey}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Video fetch failed:", response.status, errorText);
+      throw new Error(`Video download failed: ${response.status}`);
+    }
+
     const blob = await response.blob();
     return URL.createObjectURL(blob);
   } catch (error: any) {
