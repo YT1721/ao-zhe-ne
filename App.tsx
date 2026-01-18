@@ -39,6 +39,12 @@ const App: React.FC = () => {
 
   // 定时清理超过 24 小时的作品（前端演示用）
   useEffect(() => {
+    // 初始化时从 LocalStorage 恢复能量和签到数据
+    const savedEnergy = localStorage.getItem('USER_ENERGY');
+    if (savedEnergy) {
+      setUserStats(prev => ({ ...prev, energy: parseInt(savedEnergy, 10) }));
+    }
+
     const timer = setInterval(() => {
       const now = Date.now();
       const expiredIds = works.filter(w => now - w.createdAt > 24 * 60 * 60 * 1000).map(w => w.id);
@@ -50,12 +56,20 @@ const App: React.FC = () => {
   }, [works]);
 
   const addEnergy = (amount: number) => {
-    setUserStats(prev => ({ ...prev, energy: prev.energy + amount }));
+    setUserStats(prev => {
+      const newEnergy = prev.energy + amount;
+      localStorage.setItem('USER_ENERGY', newEnergy.toString());
+      return { ...prev, energy: newEnergy };
+    });
   };
 
   const consumeEnergy = (amount: number) => {
     if (userStats.energy >= amount) {
-      setUserStats(prev => ({ ...prev, energy: prev.energy - amount }));
+      setUserStats(prev => {
+        const newEnergy = prev.energy - amount;
+        localStorage.setItem('USER_ENERGY', newEnergy.toString());
+        return { ...prev, energy: newEnergy };
+      });
       return true;
     }
     return false;
