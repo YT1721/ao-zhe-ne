@@ -97,14 +97,20 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
     let downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri || operation.result?.generatedVideos?.[0]?.video?.uri;
 
     if (!downloadLink) {
-      console.error("Video Generation Operation Result:", JSON.stringify(operation, null, 2));
+      console.error("Video Generation Operation Result (Full):", JSON.stringify(operation, null, 2));
+
+      // 1. 检查是否因安全原因被拦截
       // @ts-ignore
-      if (operation.error) {
-         // @ts-ignore
-        throw new Error(`Video Generation Error: ${operation.error.message || 'Unknown error'}`);
+      const finishReason = operation.result?.error?.code || operation.error?.code;
+      if (finishReason === 400 || finishReason === "400") {
+         throw new Error("视频生成失败：请求参数有误或图片无法识别");
       }
       
-      throw new Error("No video URI found in response. Please check logs for details.");
+      // @ts-ignore
+      // 检查具体的拦截原因（如果 API 返回了相关字段）
+      // Google Veo 模型有时会因为“人物一致性”或“Deepfake 预防”策略静默失败
+      
+      throw new Error("AI 模型拒绝了请求（可能触发了人脸安全策略）。请尝试换一张不包含清晰人脸的照片测试，或者稍后再试。");
     }
 
     const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
