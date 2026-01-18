@@ -53,7 +53,7 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
           <div className="aspect-[16/10] w-full relative">
             <div 
               className="w-full h-full bg-cover bg-center grayscale opacity-80" 
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1572957777176-79352e079273?q=80&w=1000&auto=format&fit=crop")' }}
+              style={{ backgroundImage: 'url("/assets/restoration-bg.jpg")' }}
             ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-8 right-8 flex items-end justify-between">
@@ -82,7 +82,7 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
           <div className="aspect-[16/10] w-full relative">
             <div 
               className="w-full h-full bg-cover bg-center grayscale opacity-80" 
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop")' }}
+              style={{ backgroundImage: 'url("/assets/video-bg.jpg")' }}
             ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-8 right-8 flex items-end justify-between">
