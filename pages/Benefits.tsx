@@ -20,7 +20,7 @@ const Benefits: React.FC<BenefitsProps> = ({ energy, onAddEnergy, userStats }) =
     if (!checkedIn) {
       setCheckedIn(true);
       localStorage.setItem('LAST_CHECK_IN_DATE', new Date().toLocaleDateString());
-      onAddEnergy(2); // 签到奖励
+      onAddEnergy(3); // 基础签到奖励提升为3分
     }
   };
 
@@ -68,7 +68,7 @@ const Benefits: React.FC<BenefitsProps> = ({ energy, onAddEnergy, userStats }) =
               <div key={day} className={`flex flex-col items-center p-2 rounded-xl transition-all ${day === 1 && checkedIn ? 'bg-primary text-white scale-110 shadow-lg' : 'bg-gray-50 text-gray-400'}`}>
                 <span className="text-[10px] font-bold mb-1">{day}</span>
                 <span className="material-symbols-outlined !text-sm">{day === 7 ? 'card_giftcard' : 'bolt'}</span>
-                <span className="text-[10px] mt-1 font-bold">+{day === 7 ? 10 : 2}</span>
+                <span className="text-[10px] mt-1 font-bold">+{day === 7 ? 15 : 3}</span>
               </div>
             ))}
           </div>
