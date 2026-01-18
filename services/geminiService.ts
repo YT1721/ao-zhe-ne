@@ -94,7 +94,13 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
 
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
     if (!downloadLink) {
-      throw new Error("No video URI found in response");
+      console.error("Video Generation Operation Result:", JSON.stringify(operation, null, 2));
+      // @ts-ignore
+      if (operation.error) {
+         // @ts-ignore
+        throw new Error(`Video Generation Error: ${operation.error.message || 'Unknown error'}`);
+      }
+      throw new Error("No video URI found in response. Please check logs for details.");
     }
 
     const apiKey = localStorage.getItem('GEMINI_API_KEY') || import.meta.env.VITE_API_KEY || "";
