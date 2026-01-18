@@ -51,11 +51,10 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
           className="group relative bg-white rounded-[3rem] overflow-hidden shadow-2xl shadow-gray-200/50 border border-white transition-all active:scale-[0.97]"
         >
           <div className="aspect-[16/10] w-full relative">
-            <img 
-              src="https://images.unsplash.com/photo-1516661179612-4091a929656b?q=80&w=1000&auto=format&fit=crop" 
-              className="w-full h-full object-cover grayscale opacity-80" 
-              alt="Restoration" 
-            />
+            <div 
+              className="w-full h-full bg-cover bg-center grayscale opacity-80" 
+              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1516661179612-4091a929656b?q=80&w=1000&auto=format&fit=crop")' }}
+            ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-8 right-8 flex items-end justify-between">
               <div>
@@ -81,11 +80,10 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
           className="group relative bg-white rounded-[3rem] overflow-hidden shadow-2xl shadow-gray-200/50 border border-white transition-all active:scale-[0.97]"
         >
           <div className="aspect-[16/10] w-full relative">
-            <img 
-              src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop" 
-              className="w-full h-full object-cover grayscale opacity-80" 
-              alt="Video" 
-            />
+            <div 
+              className="w-full h-full bg-cover bg-center grayscale opacity-80" 
+              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop")' }}
+            ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-8 right-8 flex items-end justify-between">
               <div>
