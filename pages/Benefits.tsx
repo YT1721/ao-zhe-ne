@@ -9,12 +9,17 @@ interface BenefitsProps {
 }
 
 const Benefits: React.FC<BenefitsProps> = ({ energy, onAddEnergy, userStats }) => {
-  const [checkedIn, setCheckedIn] = useState(false);
+  const [checkedIn, setCheckedIn] = useState(() => {
+    const lastCheckIn = localStorage.getItem('LAST_CHECK_IN_DATE');
+    const today = new Date().toLocaleDateString();
+    return lastCheckIn === today;
+  });
   const [isWatchingAd, setIsWatchingAd] = useState(false);
 
   const handleCheckIn = () => {
     if (!checkedIn) {
       setCheckedIn(true);
+      localStorage.setItem('LAST_CHECK_IN_DATE', new Date().toLocaleDateString());
       onAddEnergy(2); // 签到奖励
     }
   };

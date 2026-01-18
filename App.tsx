@@ -11,7 +11,7 @@ const INITIAL_WORKS: WorkItem[] = [
     id: '1', 
     type: 'photo', 
     title: '1972年老家合影', 
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD02wFnjNYD4E92L66PnvdAW9aL9Aurxch9Omrh_Wo-hbHzTb_pUxG_1SWJS4xxYtFJ2aadbJUBkaK7bGMvdKFqQvbSUqJdcBVjNPCdJNLHFhTVQOc0us13ey2k57RyBt1s7on82949QC_haTCqbXEqbN9Xpj5KtGkYQN8N-N8uNwVtq7Ycvdbi_I1IKj1BXd-7nUQW3XyyvPGGEoflbl4qthRKT9yLwuTgAhTIhpcTzJp90ruJTXO_W8Nto9cN-3cZS3i-ewayIHM1', 
+    imageUrl: 'https://images.unsplash.com/photo-1534534747472-53e43548e58f?q=80&w=1000&auto=format&fit=crop', 
     date: new Date().toLocaleDateString(),
     createdAt: Date.now() - (4 * 60 * 60 * 1000) // 模拟 4 小时前
   },
@@ -19,7 +19,7 @@ const INITIAL_WORKS: WorkItem[] = [
     id: '2', 
     type: 'video', 
     title: '年轻时的我', 
-    imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDh7QJw4tj3C9ju4Qswc3mvGuSHtPnuw9pVUJw21AS1zXbEqdcwtvay21_OHG7K7jPpOovYDSD7FZlqAPNA2JN7mpAhbEBdd_kDDpbWNHkIl8fbh5jRjezebv-QGrgOR5iJkc0GzJzVO4VGASCZt227mSL4dlqaIgl7Xty1p8oA19TXa-0po4H2cm3ewSdZWu_Ambv67jJqknlmHfU49E8YXJpb5YGaB_QUn0IrBaA1v6O2MFoFDjyugjAcnnj1Alp3Z3O5aCEFiNBI', 
+    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop', 
     date: new Date().toLocaleDateString(),
     createdAt: Date.now() - (18 * 60 * 60 * 1000) // 模拟 18 小时前，快过期了
   },

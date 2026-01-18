@@ -60,16 +60,39 @@ const Profile: React.FC<ProfileProps> = ({ userStats, works, onGoHome, onDeleteW
 
   const handleBatchDownload = () => {
     const selectedWorks = works.filter(w => selectedIds.includes(w.id));
-    selectedWorks.forEach((work, index) => {
-      // 稍微延迟下载，防止浏览器拦截
-      setTimeout(() => {
+    selectedWorks.forEach(async (work, index) => {
+      // 使用 Web Share API 或下载链接
+      const fileName = `好着呢_${work.title}_${work.id}.${work.type === 'photo' ? 'png' : 'mp4'}`;
+      
+      try {
+        const response = await fetch(work.imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], fileName, { type: blob.type });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: '好着呢 - 老照片修复',
+            text: '这是我用“好着呢”修复的老照片，效果很棒！'
+          });
+        } else {
+          // Fallback to link download
+          const link = document.createElement('a');
+          link.href = work.imageUrl;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      } catch (error) {
+        // Fallback if fetch fails or share fails
         const link = document.createElement('a');
         link.href = work.imageUrl;
-        link.download = `好着呢_${work.title}_${work.id}.${work.type === 'photo' ? 'png' : 'mp4'}`;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      }, index * 300);
+      }
     });
     
     // 成功提示
@@ -95,7 +118,7 @@ const Profile: React.FC<ProfileProps> = ({ userStats, works, onGoHome, onDeleteW
           <div className="relative mb-5">
             <div 
               className="bg-center bg-no-repeat aspect-square bg-cover rounded-[2.5rem] h-32 w-32 border-4 border-white shadow-2xl rotate-3" 
-              style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuDVzduXPuGAlT6C0GEoky9kzx-8-xCIPQg4H5XKl2meCo1ah88SB-Etxz50MMa3M71Wpwi28zq0PjTf_NAtGS3gBVQC3V_LhL8QijbiPipOXBaHU3p2gu1s_rLeYav07XJddrYP7-86lVBMHi2IL6T2J69FjcaYWcI72GQN51S22HoRYf4mppVZJ5ORfC7JnHbWAutDgeF9WAl_EcLikph08LNfVwvS1YMrx20S6UJghmlgr58MkshSRHmrtgC746u3B-18Oew2wldi")' }}
+              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1000&auto=format&fit=crop")' }}
             ></div>
             <div className="absolute -bottom-2 -right-2 bg-primary text-white size-10 rounded-full border-4 border-white shadow-lg flex items-center justify-center">
               <span className="material-symbols-outlined text-xl font-black">verified</span>
