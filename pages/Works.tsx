@@ -10,6 +10,49 @@ const MOCK_WORKS: WorkItem[] = [
   { id: '4', type: 'video', title: '全家福视频', imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkLQFMc7sPjHQu7RjkaNPwbniQMXReqGLwF1HMcITD9ykUYqowy1DsT-KjUP-S7cwqxfc3WHHMMARNVnFvua6lKMP4NZNhqDtwFNYpfm47CvtckS-Bu9mV-XtoGm7Hl6fdXrQHwJqVHWAdWpPzUHvD01K0Uy6RR5IiRCWZP0GN-zlnkVUbgk7voe7U95zrzxsDcVgbeg2SFDcYUNl3rC9krVWshCNrAIUrF2ZrSGginzTwL6xUIKqH73Q5eKlR9XvpDBNxJUl6Czd1', date: '2024-09-01', createdAt: Date.now() - (20 * 60 * 60 * 1000) },
 ];
 
+const AssetTimer: React.FC<{ createdAt: number }> = ({ createdAt }) => {
+  const [timeLeft, setTimeLeft] = React.useState<string>('');
+
+  React.useEffect(() => {
+    const updateTimer = () => {
+      const now = Date.now();
+      const expiration = createdAt + 24 * 60 * 60 * 1000; // 24 hours validity
+      const diff = expiration - now;
+
+      if (diff <= 0) {
+        setTimeLeft('已过期');
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [createdAt]);
+
+  if (timeLeft === '已过期') {
+     return (
+        <div className="absolute top-2 left-2 bg-gray-800/60 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 flex items-center gap-1">
+          <span className="material-symbols-outlined text-gray-300 text-[10px]">event_busy</span>
+          <span className="text-gray-300 text-[10px] font-bold">已过期</span>
+        </div>
+     );
+  }
+
+  return (
+    <div className="absolute top-2 left-2 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/20 flex items-center gap-1">
+      <span className="material-symbols-outlined text-white text-[10px]">schedule</span>
+      <span className="text-white text-[10px] font-mono font-bold">{timeLeft}</span>
+    </div>
+  );
+};
+
 const Works: React.FC = () => {
   return (
     <div className="animate-in fade-in duration-500 pb-12">
@@ -31,6 +74,7 @@ const Works: React.FC = () => {
                 className="bg-cover bg-center flex flex-col gap-3 rounded-2xl justify-end p-4 aspect-[4/5] shadow-sm overflow-hidden relative"
                 style={{ backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url(${work.imageUrl})` }}
               >
+                <AssetTimer createdAt={work.createdAt} />
                 <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-md p-1.5 rounded-lg border border-white/30">
                   <span className="material-symbols-outlined text-white text-xl">
                     {work.type === 'photo' ? 'auto_fix_high' : 'play_arrow'}
