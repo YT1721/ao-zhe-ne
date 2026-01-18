@@ -6,24 +6,7 @@ import Profile from './pages/Profile';
 import RestorationFlow from './pages/RestorationFlow';
 import { Tab, UserStats, WorkItem } from './types';
 
-const INITIAL_WORKS: WorkItem[] = [
-  { 
-    id: '1', 
-    type: 'photo', 
-    title: '1972年老家合影', 
-    imageUrl: 'https://images.unsplash.com/photo-1534534747472-53e43548e58f?q=80&w=1000&auto=format&fit=crop', 
-    date: new Date().toLocaleDateString(),
-    createdAt: Date.now() - (4 * 60 * 60 * 1000) // 模拟 4 小时前
-  },
-  { 
-    id: '2', 
-    type: 'video', 
-    title: '年轻时的我', 
-    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop', 
-    date: new Date().toLocaleDateString(),
-    createdAt: Date.now() - (18 * 60 * 60 * 1000) // 模拟 18 小时前，快过期了
-  },
-];
+const INITIAL_WORKS: WorkItem[] = [];
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -33,7 +16,7 @@ const App: React.FC = () => {
     energy: 10,
     level: '初级体验官',
     checkInDays: 0,
-    totalRestored: INITIAL_WORKS.length,
+    totalRestored: 0,
     invites: 0
   });
 
