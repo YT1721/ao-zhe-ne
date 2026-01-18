@@ -53,7 +53,7 @@ const Home: React.FC<HomeProps> = ({ onStartRestore, energy }) => {
           <div className="aspect-[16/10] w-full relative">
             <div 
               className="w-full h-full bg-cover bg-center grayscale opacity-80" 
-              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?q=80&w=1000&auto=format&fit=crop")' }}
+              style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1572957777176-79352e079273?q=80&w=1000&auto=format&fit=crop")' }}
             ></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-8 right-8 flex items-end justify-between">
