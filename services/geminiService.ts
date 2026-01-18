@@ -79,7 +79,7 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
   try {
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
-      prompt: '让照片中的人物微微点头微笑，神态自然亲切，画面柔和有电影感',
+      prompt: '让照片中的人物微微点头微笑，神态自然亲切。极度重视面部特征的一致性，严禁改变人物长相。画面柔和有电影感',
       image: { imageBytes: base64Image, mimeType: 'image/jpeg' },
       config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
     });
