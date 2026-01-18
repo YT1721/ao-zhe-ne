@@ -92,7 +92,10 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
       onProgress?.("回忆正在苏醒...");
     }
 
-    const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+    // 增加对 result 字段的检查，因为有时 API 可能会返回 result 而不是 generatedVideos
+    // @ts-ignore
+    let downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri || operation.result?.generatedVideos?.[0]?.video?.uri;
+
     if (!downloadLink) {
       console.error("Video Generation Operation Result:", JSON.stringify(operation, null, 2));
       // @ts-ignore
@@ -100,6 +103,7 @@ export const generateVideoFromPhoto = async (base64Image: string, onProgress?: (
          // @ts-ignore
         throw new Error(`Video Generation Error: ${operation.error.message || 'Unknown error'}`);
       }
+      
       throw new Error("No video URI found in response. Please check logs for details.");
     }
 
