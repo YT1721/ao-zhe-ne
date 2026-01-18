@@ -30,7 +30,7 @@ const App: React.FC = () => {
   const [restorationMode, setRestorationMode] = useState<'photo' | 'video' | null>(null);
   const [works, setWorks] = useState<WorkItem[]>(INITIAL_WORKS);
   const [userStats, setUserStats] = useState<UserStats>({
-    energy: 15,
+    energy: 10,
     level: '初级体验官',
     checkInDays: 0,
     totalRestored: INITIAL_WORKS.length,
@@ -78,6 +78,7 @@ const App: React.FC = () => {
           onClose={() => setRestorationMode(null)} 
           energy={userStats.energy}
           onConsume={consumeEnergy}
+          onRefund={addEnergy}
           onSuccess={onRestorationSuccess}
           onGoToBenefits={() => {
             setRestorationMode(null);

@@ -68,6 +68,23 @@
             white-space: nowrap;
             border-width: 0;
         }
+        @keyframes progress-indeterminate {
+            0% {
+                width: 0%;
+                margin-left: 0%;
+            }
+            50% {
+                width: 70%;
+                margin-left: 30%;
+            }
+            100% {
+                width: 0%;
+                margin-left: 100%;
+            }
+        }
+        .animate-progress-indeterminate {
+            animation: progress-indeterminate 1.5s infinite ease-in-out;
+        }
     </style>
 <script type="importmap">
 {

@@ -8,6 +8,7 @@ interface RestorationFlowProps {
   onClose: () => void;
   energy: number;
   onConsume: (amount: number) => boolean;
+  onRefund: (amount: number) => void;
   onGoToBenefits: () => void;
   onSuccess: (work: WorkItem) => void;
 }
@@ -41,7 +42,7 @@ async function decodeAudioData(
   return buffer;
 }
 
-const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy, onConsume, onGoToBenefits, onSuccess }) => {
+const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy, onConsume, onRefund, onGoToBenefits, onSuccess }) => {
   const [state, setState] = useState<RestorationState & { videoUrl?: string }>({
     step: 1,
     originalImage: null,
@@ -196,9 +197,15 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
       localStorage.removeItem('GEMINI_API_KEY');
       pendingFileRef.current = { base64, dataUrl };
       setShowKeyRequest(true);
+      // 积分退还逻辑
+      onRefund(COST);
+      setErrorMessage("积分已退还，请检查 API Key");
+      setTimeout(() => setErrorMessage(null), 3000);
     } else {
       setLoadingText("服务连接稍微有点忙，请重试。");
       setErrorMessage(err.message || "服务繁忙，请稍后重试");
+      // 积分退还逻辑
+      onRefund(COST);
       setTimeout(() => setErrorMessage(null), 3000);
     }
     setState(prev => ({ ...prev, isProcessing: false }));
@@ -373,7 +380,11 @@ const RestorationFlow: React.FC<RestorationFlowProps> = ({ mode, onClose, energy
                </span>
             </div>
             <h3 className="text-xl font-black text-charcoal mb-2">正在施展魔法</h3>
-            <p className="text-gray-500 font-bold animate-pulse">{loadingText}</p>
+            <p className="text-gray-500 font-bold animate-pulse mb-4">{loadingText}</p>
+            {/* Progress Bar */}
+            <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-full bg-primary animate-progress-indeterminate rounded-full"></div>
+            </div>
           </div>
         </div>
       )}
